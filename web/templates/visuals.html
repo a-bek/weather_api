@@ -1,0 +1,127 @@
+<!DOCTYPE HTML>
+<html>
+
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css"> 
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+<script>
+$(document).ready(function() {
+    $('.start_date').datepicker({
+        dateFormat: "yy-mm-dd",
+        minDate: new Date(2008, 7, 1),
+        maxDate: -20
+    }).val();
+    $('.end_date').datepicker({
+        dateFormat: "yy-mm-dd",
+        minDate: new Date(2008, 7, 1),
+        maxDate: -2
+    }).val();
+});
+</script>
+
+<body>
+  <center>
+    <form action="/results/" method="get">
+      {% csrf_token %} <br>
+      {{ location }} <br>
+      {{ date_from }} <br>
+      {{ date_to }} <br>
+      <input type="submit" value="Submit" />
+    </form>
+    <p>Red: max</p>
+    <p>White: mean</p>
+    <p>Blue: min</p>
+    <h2>Temperature (C)</h2>
+    <p>Max: {{ max_temp }}  Min: {{ min_temp }}  Mean: {{ mean_temp }}</p>
+
+
+    <canvas id="temperature" width="800" height="500"></canvas>
+  </center>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+  <script type = "application/javascript">
+  
+    var ctx = document.getElementById("temperature").getContext("2d");
+    var data = {
+      labels: {{ dates|safe }},
+      datasets: [{
+        label: "Maximum",
+        fillColor: "rgba(220,50,50,0.2)",
+        strokeColor: "rgba(220,220,220,1)",
+        pointColor: "rgba(220,220,220,1)",
+        pointStrokeColor: "#fff",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "rgba(220,220,220,1)",
+        data: {{ max_temp_array|safe }}
+      },{
+        label: "Mean",
+        fillColor: "rgba(220,220,220,0.2)",
+        strokeColor: "rgba(220,220,220,1)",
+        pointColor: "rgba(220,220,220,1)",
+        pointStrokeColor: "#fff",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "rgba(220,220,220,1)",
+        data: {{ mean_temp_array|safe }}
+      },{
+        label: "Minimum",
+        fillColor: "rgba(50,50,220,0.2)",
+        strokeColor: "rgba(220,220,220,1)",
+        pointColor: "rgba(220,220,220,1)",
+        pointStrokeColor: "#fff",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "rgba(220,220,220,1)",
+        data: {{ min_temp_array|safe }}
+      }]
+    };
+    var temperature_chart = new Chart(ctx).Bar(data);
+    
+  </script>
+  
+  <center>
+    <h2>Humidity (%)</h2>
+    <p>Max: {{ max_humidity }}  Min: {{ min_humidity }}  Mean: {{ mean_humidity }}</p>
+
+    <canvas id="humidity" width="800" height="500"></canvas>
+  </center>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+  <script type = "application/javascript">
+  
+    var ctx = document.getElementById("humidity").getContext("2d");
+    var data = {
+      labels: {{ dates|safe }},
+      datasets: [{
+        label: "Maximum",
+        fillColor: "rgba(220,50,50,0.2)",
+        strokeColor: "rgba(220,220,220,1)",
+        pointColor: "rgba(220,220,220,1)",
+        pointStrokeColor: "#fff",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "rgba(220,220,220,1)",
+        data: {{ max_humidity_array|safe }}
+      },{
+        label: "Mean",
+        fillColor: "rgba(220,220,220,0.2)",
+        strokeColor: "rgba(220,220,220,1)",
+        pointColor: "rgba(220,220,220,1)",
+        pointStrokeColor: "#fff",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "rgba(220,220,220,1)",
+        data: {{ mean_humidity_array|safe }}
+      },{
+        label: "Minimum",
+        fillColor: "rgba(50,50,220,0.2)",
+        strokeColor: "rgba(220,220,220,1)",
+        pointColor: "rgba(220,220,220,1)",
+        pointStrokeColor: "#fff",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "rgba(220,220,220,1)",
+        data: {{ min_humidity_array|safe }}
+      }],
+    };
+    var humidiy_chart = new Chart(ctx).Bar(data);
+    
+  </script>
+  
+  
+</body>
+
+</html>

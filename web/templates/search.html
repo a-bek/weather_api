@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html>
+
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css"> 
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+<script>
+$(document).ready(function() {
+    $('.start_date').datepicker({
+        dateFormat: "yy-mm-dd",
+        minDate: new Date(2008, 7, 1),
+        maxDate: -20
+    }).val();
+    $('.end_date').datepicker({
+        dateFormat: "yy-mm-dd",
+        minDate: new Date(2008, 7, 1),
+        maxDate: -2
+    }).val();
+});
+</script>
+
+
+<body>
+
+<form action="/results/" method="get">
+    {% csrf_token %}
+    <br> {{ location }} <br>
+    <br> {{ date_from }} <br>
+    <br> {{ date_to }} <br>
+    <br> <input type="submit" value="Submit" /> <br>
+</form>
+
+{% if error %}
+    {% block errors %}
+        <div class='imp_msg'>{{ error }} </div>
+    {% endblock %}
+{% endif %}
+
+</body>
+
+</html>
